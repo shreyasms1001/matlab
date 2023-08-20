@@ -1,0 +1,207 @@
+Experiment No 2
+ii) Linear Convolution 
+clear all;
+close all;
+x=input('Enter the first input sequence x[n] ');
+h=input('Enter the first input sequence h[n] ');
+Lx=length(x);
+Lh=length(h);
+len=Lx+Lh -1;
+ 
+for n=1:len
+    y(n)=0;
+    for k=1:Lx
+        if((n-k)>=0&(n-k)<Lh)
+            y(n)=y(n)+x(k).*h(n-k+1);
+        end
+    end
+end
+disp('Linear Convolution of x[n] & h[n] is ')
+disp(y)
+
+
+Result
+Enter the first input sequence x[n] [1 2 3 4]
+Enter the first input sequence h[n] [1 0 1]
+Linear Convolution of x[n] & h[n] is 
+     1     2     4     6     3     4
+ii) Circular Convolution 
+clear all;
+close all;
+x1=input('Enter the first input sequence x1[n] ');
+x2=input('Enter the first input sequence x2[n] ');
+Lx1=length(x1);
+Lx2=length(x2);
+len=max(Lx1,Lx2);
+if Lx1<len
+    x1=[x1,zeros(len-Lx1)];
+else
+    x2=[x2,zeros(len-Lx2)];
+end
+ 
+for n=1:len
+    y(n)=0;
+    for k=1:len
+        i=n-k+1;
+        if(i<=0)
+            i=i+len;
+        end
+        y(n)=y(n)+x2(k)*x1(i);
+    end
+end
+disp('Circular Convolution of x1[n] & x2[n] is ')
+disp(y)
+
+
+Result
+Enter the first input sequence x1[n] [1 2 3 4]
+Enter the first input sequence x2[n] [1 0 1]
+Circular Convolution of x1[n] & x2[n] is 
+     4     6     4     6
+
+iii) Autocorrelation 
+clear all;
+close all;
+x=input('Enter the input sequence x[n]');
+Lx=length(x)-1;
+h=fliplr(x);
+rxx=conv(x,h);
+disp('Auto Corelation of x[n] is rxx[n]')
+disp(rxx)
+ 
+%Verification using builtin function xcorr()
+z=xcorr(x,x);
+disp('Auto Corelation of x[n] using builtin function is z[n]')
+disp(z)
+ 
+%Auto correlation using for loop
+len=2*Lx+1;
+for n=1:len
+    Rxx(n)=0;
+    for k=1:Lx+1
+        if((n-k)>=0 & (n-k)<=Lx)
+            Rxx(n)=Rxx(n)+x(k).*h(n-k+1);
+        end
+    end
+end
+disp('Auto Corelation of x[n] is Rxx[n]')
+disp(Rxx)
+ 
+%Ploting the graph
+a=0:Lx;
+subplot(2,2,1)
+stem(a,x)
+title('Input Sequence x[n]')
+xlabel('Samples')
+ylabel('Amplitude')
+ 
+b=(-Lx):Lx;
+subplot(2,2,2)
+stem(b,Rxx)
+title('Auto Correlation rxx[n]')
+xlabel('Samples')
+ylabel('Amplitude')
+ 
+subplot(2,2,3)
+stem(b,z)
+title('Auto Correlation using builtin function z[n]')
+xlabel('Samples')
+ylabel('Amplitude') 
+ 
+subplot(2,2,4)
+stem(b,z)
+title('Auto Correlation Rxx[n]')
+xlabel('Samples')
+ylabel('Amplitude') 
+
+
+
+Result
+Enter the input sequence x[n][1 2 3 4]
+Auto Corelation of x[n] is rxx[n]
+     4    11    20    30    20    11     4
+
+Auto Corelation of x[n] using builtin function is z[n]
+    4.0000   11.0000   20.0000   30.0000   20.0000   11.0000    4.0000
+
+Auto Corelation of x[n] is Rxx[n]
+     4    11    20    30    20    11     4
+ 
+
+
+iv) Cross Correlation 
+clear all;
+close all;
+x=input('Enter the input sequence x[n]');
+Lx=length(x)-1;
+h=input('Enter the second sequence h[n]');
+Lh=length(h)-1;
+y=fliplr(h);
+Rxy=conv(x,y);
+disp('Cross Correlation is Rxy[n]')
+disp(Rxy)
+ 
+%Verification using builtin function xcorr()
+z=xcorr(x,h);
+disp('Cross Correlation using builtin function is z[n]')
+disp(z)
+ 
+%Cross correlation using for loop
+len=Lx+Lh+1;
+for n=1:len
+    rxx(n)=0;
+    for k=1:Lx+1
+        if((n-k)>=0 & (n-k)<=Lh)
+            rxx(n)=rxx(n)+x(k).*y(n-k+1);
+        end
+    end
+end
+disp('Cross Correlation of x[n] is Z[n]')
+disp(rxx)
+ 
+a=0:Lx;
+subplot(3,2,1)
+stem(a,x)
+title('First Input Sequence x[n]')
+xlabel('Samples')
+ylabel('Amplitude')
+ 
+b=0:Lh;
+subplot(3,2,2)
+stem(a,h)
+title('Second Input Sequence y[n]')
+xlabel('Samples')
+ylabel('Amplitude')
+ 
+c=(-Lx):Lx;
+subplot(3,2,3)
+stem(c,Rxy)
+title('Cross Correlation Rxy[n] using builtin function xcorr()')
+xlabel('Samples')
+ylabel('Amplitude')
+ 
+subplot(3,2,4)
+stem(c,z)
+title('Cross Correlation using builtin function xcorr() z[n]')
+xlabel('Samples')
+ylabel('Amplitude') 
+ 
+subplot(3,2,5:6)
+stem(c,rxx)
+title('Cross Correlation rxx[n]')
+xlabel('Samples')
+ylabel('Amplitude') 
+
+
+Result
+Enter the input sequence x[n][1 2 3 4]
+Enter the second sequence h[n][4 3 2 1]
+Cross Correlation is Rxy[n]
+     1     4    10    20    25    24    16
+
+Cross Correlation using builtin function is z[n]
+    1.0000    4.0000   10.0000   20.0000   25.0000   24.0000   16.0000
+
+Cross Correlation of x[n] is Z[n]
+     1     4    10    20    25    24    16
+ 

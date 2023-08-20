@@ -1,0 +1,276 @@
+LIT System: To find the impulse response of a given system, Solution of difference equation, Verification of Sampling Theorem. 
+i)LIT System
+%Without initializing values
+%y(n)+0.8y(n-2)+0.6y(n-3)=x(n)+0.7x(n-1)+0.5x(n-2)
+ 
+clear all;
+close all;
+b=input('Enter the coefficients of x ');
+a=input('Enter the coefficients of y ');
+N=input('Enter the length of the input sequence ');
+n=0:1: N;
+step=1.^n;
+imp=[1,zeros(1,N)];
+
+RES1=filter(b,a,step)
+RES2=filter(b,a,imp)
+ 
+subplot(2,2,1)
+stem(n,step)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Input ')
+ 
+subplot(2,2,2)
+stem(n,imp)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Impulse Input')
+ 
+subplot(2,2,3)
+stem(n,RES1)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Response')
+ 
+subplot(2,2,4)
+stem(n,RES2)
+grid on
+xlabel('Input');
+ylabel('Output Response');
+title('Impulse Response')
+Result
+Enter the coefficients of x [1 0.7 0.5]
+Enter the coefficients of y [1 0 0.8 0.6]
+Enter the length of the input sequence 10
+
+RES1 =
+
+    1.0000    1.7000    1.4000    0.2400    0.0600    1.1680    2.0080    1.2296   -0.1072    0.0115    1.5480
+
+
+RES2 =
+
+    1.0000    0.7000   -0.3000   -1.1600   -0.1800    1.1080    0.8400   -0.7784   -1.3368    0.1187    1.5365
+ 
+
+
+
+Program 2 
+%Initializing Y values
+%y(n)=1//3x(n)+1/3x(n-1)+1/3x(n-2)+0.95y(n-1)-0.9025y(n-2)
+%y(-1)=-2, y(-2)=-3
+
+clear all;
+close all;
+b=input('Enter the coefficients of x ');
+a=input('Enter the coefficients of y ');
+N=input('Enter the length of the input sequence ');
+n=0:1:N;
+step=1.^n;
+imp=[1,zeros(1,N)];
+ 
+Y=[-2 -3];
+XIC=filtic(b,a,Y);
+RES1=filter(b,a,step,XIC)
+RES2=filter(b,a,imp,XIC)
+ 
+subplot(2,2,1)
+stem(n,step)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Input ');
+ 
+subplot(2,2,2)
+stem(n,imp)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Impulse Input');
+ 
+subplot(2,2,3)
+stem(n,RES1)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Response');
+ 
+subplot(2,2,4)
+stem(n,RES2)
+grid on
+xlabel('Input');
+ylabel('Output Response');
+title('Impulse Response');
+
+
+Result
+Enter the coefficients of x [1/3 1/3 1/3]
+Enter the coefficients of y  [1 -0.95 0.9025]
+Enter the length of the input sequence 10
+
+RES1 =
+
+    1.1408    3.5555    3.3481    0.9719   -1.0984   -0.9206    1.1167    2.8917    2.7393    0.9925  
+ -0.5293
+
+
+RES2 =
+
+    1.1408    3.2221    2.3647   -0.6615   -2.7626   -2.0275    0.5671    2.3686    1.7383   -0.4862  
+ -2.0307
+ 
+
+
+%For the given interval
+%y(n)-y(n-1)+0.9y(n-2)=x(n) for all n
+%n=-5:5
+ 
+%For the given interval
+%y(n)-y(n-1)+0.9y(n-2)=x(n) for all n
+%n=-5:5
+ 
+clear all;
+close all;
+b=input('Enter the coefficients of x ');
+a=input('Enter the coefficients of y ');
+n=-5:5;
+step=[zeros(1,5) ones(1,5)];
+imp=[zeros(1,5) 1 zeros(1,5)];
+ 
+RES1=filter(b,a,step)
+RES2=filter(b,a,imp)
+ 
+subplot(2,2,1)
+stem(step)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Input ');
+ 
+subplot(2,2,2)
+stem(imp)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Impulse Input');
+ 
+subplot(2,2,3)
+stem(RES1)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Step Response');
+ 
+subplot(2,2,4)
+stem(RES2)
+grid on
+xlabel('Time');
+ylabel('Amplitude');
+title('Impulse Response');
+
+
+
+Result
+Enter the coefficients of x 1
+Enter the coefficients of y [1 -1 0.9]
+
+RES1 =
+
+         0         0         0         0         0    1.0000    2.0000    2.1000    1.3000    0.4100
+
+
+RES2 =
+
+         0         0         0         0         0    1.0000    1.0000    0.1000   -0.8000   -0.8900   -0.1700
+ 
+
+
+ii) Sampling Theorem 
+close all;
+clear all;
+t=0:0.001:0.1;
+f1=input('Enter the Input Frequency1 = ');
+f2=input('Enter the Input Frequency2 = ');
+ 
+%Input Signal
+y=cos(2*pi*f1*t) + cos(2*pi*f2*t);
+fm=max(f1,f2);
+ 
+subplot(4,1,1)
+plot(t,y);
+grid on;
+title('Input Sinusoidal Signal');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+%Under Sampling
+fs1=fm;
+ts1=1/fs1;
+tx1=0:ts1:0.1;
+y1=cos(2*pi*f1*tx1) + cos(2*pi*f2*tx1)
+ 
+subplot(4,2,3)
+stem(tx1,y1);
+grid on;
+title('Sinusoidal Signal sampled at fs=fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+subplot(4,2,4)
+plot(tx1,y1);
+grid on;
+title('Recovered Signal sampled at fs=fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+%Right Sampling
+fs2=2*fm;
+ts2=1/fs2;
+tx2=0:ts2:0.1
+y2=cos(2*pi*f1*tx2) + cos(2*pi*f2*tx2)
+ 
+subplot(4,2,5)
+stem(tx2,y2);
+grid on;
+title('Sinusoidal Signal sampled at fs=2*fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+subplot(4,2,6)
+plot(tx2,y2);
+grid on;
+title('Recovered Signal sampled at fs=2*fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+%Over Sampling
+fs3=3*fm;
+ts3=1/fs3;
+tx3=0:ts3:0.1;
+y3=cos(2*pi*f1*tx3) + cos(2*pi*f2*tx3)
+ 
+subplot(4,2,7)
+stem(tx3,y3);
+grid on;
+title('Sinusoidal Signal sampled at fs=3*fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+subplot(4,2,8)
+plot(tx3,y3);
+grid on;
+title('Recovered Signal sampled at fs=3*fm Hz');
+xlabel('Time(s)');
+ylabel('Amplitude(V)');
+ 
+
+
+Result
+Enter the Input Frequency1 = 100
+Enter the Input Frequency2 = 200
+
+ 
